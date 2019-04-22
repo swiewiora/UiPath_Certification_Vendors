@@ -1,0 +1,179 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="System1_ExtractVendorData"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:sd="clr-namespace:System.Data;assembly=System.Data"
+ xmlns:ui="http://schemas.uipath.com/workflow/activities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_strVendor" Type="InArgument(x:String)" />
+    <x:Property Name="in_strCity" Type="InArgument(x:String)" />
+    <x:Property Name="in_strCountry" Type="InArgument(x:String)" />
+    <x:Property Name="in_listCountryGroup" Type="InArgument(s:String[])" />
+    <x:Property Name="in_strOutputPath" Type="InArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap2010:WorkflowViewState.IdRef>System1_ExtractVendorData_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Core</AssemblyReference>
+      <AssemblyReference>UiPath.Core.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.IntelligentOCR</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.Python</AssemblyReference>
+      <AssemblyReference>UiPath.Word</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Scrapes search results, compares them with All Vendors Table, checks if country is in country group, exports data to Excel file&#xA;&#xA;Preconditions: ACME System 1 opened on Vendors Search Results page&#xA;Output: Excel Sheet in Data\Output\Vendors.xlsx" DisplayName="System1_ExtractVendorData" sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="strVendor" />
+      <Variable x:TypeArguments="x:String" Name="strCity" />
+      <Variable x:TypeArguments="x:String" Name="strCountry" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtVendor" />
+      <Variable x:TypeArguments="x:String" Name="strVendorsDT" />
+    </Sequence.Variables>
+    <WriteLine DisplayName="Write line" sap2010:WorkflowViewState.IdRef="WriteLine_4" Text="Extract Vendor Data" />
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="IE" DisplayName="Attach Browser Vendor Search Result" sap2010:WorkflowViewState.IdRef="BrowserScope_2" InformativeScreenshot="d986cbdc4ec5e18c6a0d7131601927f2" Selector="&lt;html title='ACME System 1 - Vendors - Search Results' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_6">
+            <ui:ExtractData NextLinkSelector="{x:Null}" ContinueOnError="True" DataTable="[dtVendor]" DelayBetweenPagesMS="300" DisplayName="Extract Structured Data Vendor Search Result" ExtractMetadata="&lt;extract-table get_columns_name='1' get_empty_columns='1' /&gt;" sap2010:WorkflowViewState.IdRef="ExtractData_3" MaxNumberOfResults="100">
+              <ui:ExtractData.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="19843f4a84ff9d4db9c8a196f0846b20" Selector="&lt;webctrl tag='TABLE' /&gt;" WaitForReady="COMPLETE" />
+              </ui:ExtractData.Target>
+            </ui:ExtractData>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+    <ui:OutputDataTable DataTable="[dtVendor]" DisplayName="Output data table" sap2010:WorkflowViewState.IdRef="OutputDataTable_1" Text="[strVendorsDT]" />
+    <WriteLine DisplayName="Write line VendorsDT" sap2010:WorkflowViewState.IdRef="WriteLine_3" Text="[strVendorsDT]" />
+    <Assign DisplayName="Assign Vendor" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[strVendor]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[dtVendor.Rows(0)("Vendor").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign City" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[strCity]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[dtVendor.Rows(0)("City").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign Country" sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[strCountry]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[dtVendor.Rows(0)("Country").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <If Condition="[in_strVendor.Equals (strVendor) And in_strCity.Equals(strCity) And in_strCountry.Equals(strCountry)]" DisplayName="If Data are the same" sap2010:WorkflowViewState.IdRef="If_1">
+      <If.Else>
+        <Throw Exception="[new BusinessRuleException (&quot;Values from Search Result do not match values from Display All Vendors page&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_1" />
+      </If.Else>
+    </If>
+    <WriteLine DisplayName="Write line" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;Country: &quot; + strCountry]" />
+    <If Condition="[in_listCountryGroup.Contains(strCountry)]" DisplayName="If Country Belongs to CountryGroup" sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Else>
+        <Throw Exception="[new BusinessRuleException (&quot;Country does not belong to specified group&quot;)]" sap2010:WorkflowViewState.IdRef="Throw_2" />
+      </If.Else>
+    </If>
+    <ui:AppendRange DataTable="[dtVendor]" DisplayName="Append Range Vendor" sap2010:WorkflowViewState.IdRef="AppendRange_1" SheetName="Sheet1" WorkbookPath="[Path.Combine(Environment.CurrentDirectory, in_strOutputPath, &quot;Vendors.xlsx&quot;)]" />
+    <sads:DebugSymbol.Symbol>d1ZDOlxQcm9qZWt0eVxVaVBhdGhcVWlQYXRoX0NlcnRpZmljYXRpb25fVmVuZG9yc1xTeXN0ZW0xXFN5c3RlbTFfRXh0cmFjdFZlbmRvckRhdGEueGFtbClQA5ABDgIBAVgFWHQCATdZBWgXAgEsaQVpnAECASdqBWp5AgEkawVyDgIBIHMFeg4CARx7BYIBDgIBGIMBBYcBCgIBDogBBYgBhQECAQuJAQWNAQoCAQeOAQWOAfsBAgECWFxYcQIBOFmgAlnhAgIBNl8LZRYCAS1piQFpmQECASppI2kvAgEoamZqdgIBJXAwcFUCASNtMW08AgEheDB4UwIBH3UxdToCAR2AATCAAVYCARt9MX09AgEZgwETgwF6AgEPhQEJhQG+AQIBFogBXIgBggECAQyJAROJAT8CAQiLAQmLAZ0BAgEJjgEfjgErAgEFjgGIAY4BkAECAQSOAZ4BjgH4AQIBA2ANZB4CAS6FARqFAZEBAgEXiwEaiwFwAgEKYNQCYNkCAgE1YqABYr8BAgE0YHtggAECATNgSWBPAgEyYFpgZgIBMGDMAWCQAgIBLw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="464,62.4" />
+      <sap2010:ViewStateData Id="ExtractData_3" sap:VirtualizedContainerService.HintSize="313.6,107.2" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="336,232">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="BrowserScope_2" sap:VirtualizedContainerService.HintSize="464,379.2" />
+      <sap2010:ViewStateData Id="OutputDataTable_1" sap:VirtualizedContainerService.HintSize="464,22.4" />
+      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="464,62.4" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="464,60.8" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="464,60.8" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="464,60.8" />
+      <sap2010:ViewStateData Id="Throw_1" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,211.2" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="464,62.4" />
+      <sap2010:ViewStateData Id="Throw_2" sap:VirtualizedContainerService.HintSize="200,22.4" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,211.2" />
+      <sap2010:ViewStateData Id="AppendRange_1" sap:VirtualizedContainerService.HintSize="464,115.2" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486.4,1925.6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="System1_ExtractVendorData_1" sap:VirtualizedContainerService.HintSize="526.4,2085.6" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
